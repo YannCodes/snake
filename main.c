@@ -42,18 +42,21 @@ int main(int argc, char **argv)
     
     Coord* food = createFood(list);
     
-    time_t oldTime = time(NULL);
+    struct timespec oldTime, currentTime;
     
     int score = 0;
     int oldScore = 0;
     
+    clock_gettime(CLOCK_MONOTONIC, &oldTime);
+    
     for(;;)
     {
+        clock_gettime(CLOCK_MONOTONIC, &currentTime);
         direction = getInput(list,direction,oldDirection); //get the key event
-
-        if(oldTime + 1 <= time(NULL))
+        
+        if( ((currentTime.tv_nsec - oldTime.tv_nsec + 1000000000)%1000000000) > 200000000) //200000000ns = 200ms
         {
-            oldTime = time(NULL);
+            clock_gettime(CLOCK_MONOTONIC, &oldTime);  //diff
             clearMap(map);
             moveSnake(list,direction);
             oldDirection = direction;
