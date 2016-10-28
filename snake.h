@@ -15,40 +15,50 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <ncurses.h>
-#include <time.h>
-#include <unistd.h>
-#include "list.h"
+#ifndef SNAKE_H
+#define SNAKE_H
 
-typedef enum Direction Direction;
-enum Direction
-{
-    UP, DOWN, LEFT, RIGHT, VOID
-};
-
-typedef int TwoDArrayPointer[10];
-
-typedef struct Coord Coord;
-    struct Coord
+    #ifndef WIN
+    #include <ncurses.h>
+    #else
+    #include <ncurses/ncurses.h>    //necessary for MXE
+    #endif
+    
+    #include <time.h>
+    #include <unistd.h>
+    #include "list.h"
+    
+    typedef enum Direction Direction;
+    enum Direction
     {
-        int numberX;
-        int numberY;
+        UP, DOWN, LEFT, RIGHT, VOID
     };
-
-Direction getInput(List* maliste, Direction currentDirection, Direction oldDirection);
-
-void moveSnake(List *maliste,Direction direction);
-
-void genMap(List* list,TwoDArrayPointer map[10], Coord* food);
-
-void dispMap(List* list,TwoDArrayPointer map[10]);
-
-void clearMap(TwoDArrayPointer map[10]);
-
-void dispBorder();
-
-Coord* createFood(List* list);
-
-int hitBoxFood(List* list,TwoDArrayPointer map[10], Coord* food, int score);
-
-void hitBoxSelf(List* list,TwoDArrayPointer map[10]);
+    
+    typedef int TwoDArrayPointer[10];
+    
+    typedef struct Coord Coord;
+        struct Coord
+        {
+            int numberX;
+            int numberY;
+        };
+    
+    Direction getInput(List* maliste, Direction currentDirection, Direction oldDirection);
+    
+    void moveSnake(List *maliste,Direction direction);
+    
+    void genMap(List* list,TwoDArrayPointer map[10], Coord* food);
+    
+    void dispMap(List* list,TwoDArrayPointer map[10]);
+    
+    void clearMap(TwoDArrayPointer map[10]);
+    
+    void dispBorder();
+    
+    Coord* createFood(List* list);
+    
+    int hitBoxFood(List* list,TwoDArrayPointer map[10], Coord* food, int score);
+    
+    void hitBoxSelf(List* list,TwoDArrayPointer map[10]);
+    
+#endif

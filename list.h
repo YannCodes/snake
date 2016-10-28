@@ -15,12 +15,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LISTE_H
-#define LISTE_H
+#ifndef LIST_H
+#define LIST_H
 
     #include <stdio.h>
     #include <stdlib.h>
+    
+    #ifndef WIN
     #include <ncurses.h>
+    #else
+    #include <ncurses/ncurses.h>    //necessary for MXE
+    #endif
 
     typedef struct Element Element;
     struct Element

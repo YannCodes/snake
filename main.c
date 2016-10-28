@@ -15,7 +15,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef WIN
 #include <ncurses.h>
+#else
+#include <ncurses/ncurses.h>    //necessary for MXE
+#endif
+
 #include <time.h>
 #include "list.h"
 #include "snake.h"
