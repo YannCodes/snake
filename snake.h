@@ -26,6 +26,7 @@
     
     #include <time.h>
     #include <unistd.h>
+    #include <stdbool.h>
     #include "list.h"
     
     typedef enum Direction Direction;
@@ -43,9 +44,9 @@
             int numberY;
         };
     
-    Direction getInput(List* maliste, Direction currentDirection, Direction oldDirection);
+    Direction getInput(Direction currentDirection, Direction oldDirection, bool isLayoutFR);
     
-    void moveSnake(List *maliste,Direction direction);
+    void moveSnake(List *list,Direction direction);
     
     void genMap(List* list,TwoDArrayPointer map[10], Coord* food);
     

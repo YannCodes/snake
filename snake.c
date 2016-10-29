@@ -23,7 +23,7 @@
 #define FOOD 2
 #define BLANK 0
 
-Direction getInput(List *maliste, Direction currentDirection, Direction oldDirection)
+Direction getInput(Direction currentDirection, Direction oldDirection, bool isLayoutFR)
 {
     /*the oldDirection is needed because without it, the snake will be able go back (this trigger the hitbox)
     the currentDirection is needed if the user changes the direction more than one time between two moves of 
@@ -36,77 +36,84 @@ Direction getInput(List *maliste, Direction currentDirection, Direction oldDirec
     
     Direction newDirection = VOID;
     
-    switch(input)
+    char upChar;
+    char leftChar;
+    char downChar;
+    char rightChar;
+    
+    if(isLayoutFR)
     {
-        case 'z':
-            newDirection =  UP;
-            break;
-        case 'q':
-            newDirection =  LEFT;
-            break;
-        case 's':
-            newDirection =  DOWN;
-            break;
-        case 'd':
-            newDirection =  RIGHT;
-            break;
-        case 'x':
-            endwin();
-            exit(EXIT_SUCCESS);
-        }
+        upChar = 'z';
+        leftChar = 'q';
+        downChar = 's';
+        rightChar = 'd';
+    }
+    else
+    {
+        upChar = 'w';
+        leftChar = 'a';
+        downChar = 's';
+        rightChar = 'd';
+    }
+    
+    if( input == upChar) { newDirection =  UP;}
+    else if( input == leftChar) { newDirection =  LEFT;}
+    else if( input == downChar) { newDirection =  DOWN;}
+    else if( input == rightChar) { newDirection =  RIGHT;}
+    else if( input == 'x') { endwin(); exit(EXIT_SUCCESS); }
         
-        if( (oldDirection == UP && newDirection == DOWN) || (oldDirection == DOWN && newDirection == UP) || (oldDirection == LEFT && newDirection == RIGHT) || (oldDirection == RIGHT && newDirection == LEFT) )
-	{
-	    newDirection = currentDirection;	//if the new direction is at the opposite of the old one, cancel the new move
-	}
-        
-        if(newDirection == VOID){newDirection = currentDirection;}
-        
-        return newDirection;
+    if( (oldDirection == UP && newDirection == DOWN) || (oldDirection == DOWN && newDirection == UP) || (oldDirection == LEFT && newDirection == RIGHT) || (oldDirection == RIGHT && newDirection == LEFT) || (newDirection == VOID) )
+    {
+        newDirection = currentDirection;	//if the new direction is at the opposite of the old one, cancel the new move
+    }
+    
+    //if(newDirection == VOID){newDirection = currentDirection;}
+    
+    return newDirection;
 }
 
-void moveSnake(List *maliste, Direction direction)
+void moveSnake(List *list, Direction direction)
 {
     int x,y;
     
     switch(direction) //moving snake in different direction based on the Direction
     {
         case RIGHT:
-            if(maliste->head->numberX == 9)
+            if(list->head->numberX == 9)
                 x=0;
             else
-                x=maliste->head->numberX + 1;
-            y=maliste->head->numberY;
+                x=list->head->numberX + 1;
+            y=list->head->numberY;
             break;
         
         case LEFT:
-            if(maliste->head->numberX == 0)
+            if(list->head->numberX == 0)
                 x=9;
             else
-                x=maliste->head->numberX - 1;
-            y=maliste->head->numberY;
+                x=list->head->numberX - 1;
+            y=list->head->numberY;
             break;
         
         case UP:
-            if(maliste->head->numberY == 0)
+            if(list->head->numberY == 0)
                 y=9;
             else
-                y=maliste->head->numberY - 1;
-            x=maliste->head->numberX;
+                y=list->head->numberY - 1;
+            x=list->head->numberX;
             break;
         
         case DOWN:
-            if(maliste->head->numberY == 9)
+            if(list->head->numberY == 9)
                 y=0;
             else
-                y=maliste->head->numberY + 1;
-            x=maliste->head->numberX;
+                y=list->head->numberY + 1;
+            x=list->head->numberX;
             break;
         case VOID:
             exit(EXIT_FAILURE);
     }
     
-    insert(maliste,x,y); //create the new head of the snake based on the switch
+    insert(list,x,y); //create the new head of the snake based on the switch
 }
 
 void genMap(List* list,TwoDArrayPointer map[10], Coord* food)

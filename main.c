@@ -22,11 +22,55 @@
 #endif
 
 #include <time.h>
+
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#define USAGE printf( "usage: %s [ -h | -l [fr|us] ] \n", argv[0] );
+
 #include "list.h"
 #include "snake.h"
 
 int main(int argc, char **argv)
 {
+    bool isLayoutFR = false;
+    
+    //command line arguments parsing
+    if( argc == 3 && !strcmp(argv[1],"-l") )
+    {
+        if(!strcmp(argv[2],"fr"))
+        {
+            isLayoutFR = true;
+        }
+        else if(!strcmp(argv[2],"us"))
+        {
+            isLayoutFR = false;
+        }
+        else
+        {
+            USAGE
+            exit(EXIT_FAILURE);
+        }
+    }
+    else if( argc == 2 && !strcmp(argv[1],"-h"))
+    {
+        USAGE
+        printf("\nsnake (C) 2016 Yann Lochet\
+        \nThis program comes with ABSOLUTELY NO WARRANTY.\
+        \nThis is free software, and you are welcome to\
+        \nredistribute it under certain conditions.\n");
+        printf("\nTo play, use the WASD (US layout) or ZQSD (FR layout) keys (see -l)\
+        \nTo exit, use X.\
+        \nIf no arguments supplied, launch the game with US layout.\n");
+        exit(EXIT_SUCCESS);
+    }
+    else if(argc > 1)
+    {
+        USAGE
+        exit(EXIT_FAILURE);
+    }
+    
+    //ncurses init
     initscr();
     noecho();
     cbreak();
@@ -57,7 +101,7 @@ int main(int argc, char **argv)
     for(;;)
     {
         clock_gettime(CLOCK_MONOTONIC, &currentTime);
-        direction = getInput(list,direction,oldDirection); //get the key event
+        direction = getInput(direction,oldDirection,isLayoutFR); //get the key event
         
         if( ((currentTime.tv_nsec - oldTime.tv_nsec + 1000000000)%1000000000) > 200000000) //200000000ns = 200ms
         {
