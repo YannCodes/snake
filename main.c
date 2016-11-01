@@ -77,6 +77,14 @@ int main(int argc, char **argv)
     nodelay(stdscr,1);
     curs_set(0);
     
+    //term size check
+    if(COLS < 14 || LINES < 12)
+    {
+        printf("Your terminal is too small, the required minimum is 12x14\n");
+        endwin();
+        exit(EXIT_FAILURE);
+    }
+
     List *list = init(0,0);
     insert(list,0,1);
 
